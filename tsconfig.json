@@ -3,6 +3,9 @@
     "target": "ES2017",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
+    "noUncheckedIndexedAccess": true, // TypeScript compiler option that improves type safety when accessing elements in arrays or objects via indexing.
+    "noImplicitReturns": true, //Ensures that every code path in a function explicitly returns a value, or none of them do.
+    "noFallthroughCasesInSwitch": true, // Prevents accidental fallthrough in switch statements where a case doesn't end in a break, return, or throw.
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,

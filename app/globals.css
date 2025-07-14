@@ -1,26 +1,307 @@
 @import "tailwindcss";
 
+/* Custom CSS Variables for Focusify - Study-with-me Aesthetic */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Purple gradient background inspired by study-with-me */
+  --background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --background-overlay: rgba(0, 0, 0, 0.3);
+  --foreground: #ffffff;
+  --card: rgba(255, 255, 255, 0.1);
+  --card-foreground: #ffffff;
+  --primary: #ffffff;
+  --primary-foreground: #667eea;
+  --secondary: rgba(255, 255, 255, 0.2);
+  --secondary-foreground: #ffffff;
+  --accent: #fbbf24;
+  --accent-foreground: #1f2937;
+  --muted: rgba(255, 255, 255, 0.1);
+  --muted-foreground: rgba(255, 255, 255, 0.7);
+  --border: rgba(255, 255, 255, 0.2);
+  --ring: #ffffff;
+
+  /* Focus-specific colors for study aesthetic */
+  --focus-active: #ffffff;
+  --focus-break: rgba(255, 255, 255, 0.8);
+  --focus-pause: #fbbf24;
+  --focus-complete: #10b981;
+
+  /* Timer colors */
+  --timer-progress: #3b82f6;
+  --timer-background: #f1f5f9;
+  --timer-text: #1e293b;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
+/* Dark theme - keep purple aesthetic */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: linear-gradient(135deg, #4c1d95 0%, #581c87 100%);
+    --background-overlay: rgba(0, 0, 0, 0.4);
+    --foreground: #ffffff;
+    --card: rgba(255, 255, 255, 0.1);
+    --card-foreground: #ffffff;
+    --primary: #ffffff;
+    --primary-foreground: #4c1d95;
+    --secondary: rgba(255, 255, 255, 0.15);
+    --secondary-foreground: #ffffff;
+    --accent: #fbbf24;
+    --accent-foreground: #1f2937;
+    --muted: rgba(255, 255, 255, 0.1);
+    --muted-foreground: rgba(255, 255, 255, 0.6);
+    --border: rgba(255, 255, 255, 0.2);
+    --ring: #ffffff;
+
+    /* Focus-specific colors - dark mode */
+    --focus-active: #ffffff;
+    --focus-break: rgba(255, 255, 255, 0.8);
+    --focus-pause: #fbbf24;
+    --focus-complete: #10b981;
+
+    /* Timer colors - dark mode */
+    --timer-progress: #60a5fa;
+    --timer-background: #1e293b;
+    --timer-text: #e2e8f0;
   }
+}
+
+/* Tailwind v4 Theme Configuration */
+@theme inline {
+  /* Base colors */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-ring: var(--ring);
+
+  /* Focus app specific colors */
+  --color-focus-active: var(--focus-active);
+  --color-focus-break: var(--focus-break);
+  --color-focus-pause: var(--focus-pause);
+  --color-focus-complete: var(--focus-complete);
+
+  /* Timer specific colors */
+  --color-timer-progress: var(--timer-progress);
+  --color-timer-background: var(--timer-background);
+  --color-timer-text: var(--timer-text);
+
+  /* Typography */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
+
+  /* Custom animations */
+  --animate-pulse-slow: pulse-slow 3s ease-in-out infinite;
+  --animate-timer-tick: timer-tick 1s ease-in-out;
+  --animate-bounce-gentle: bounce-gentle 2s ease-in-out infinite;
+  --animate-fade-in: fade-in 0.3s ease-out;
+  --animate-slide-up: slide-up 0.3s ease-out;
+
+  /* Border radius */
+  --radius-sm: 0.25rem;
+  --radius: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+
+  /* Shadows for depth */
+  --shadow-timer: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
+}
+
+/* Custom keyframes for animations */
+@keyframes pulse-slow {
+  0%,
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.02);
+  }
+}
+
+@keyframes timer-tick {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+@keyframes bounce-gentle {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-4px);
+  }
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Base styles for study-with-me aesthetic */
+* {
+  box-sizing: border-box;
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100vh;
+  position: relative;
+}
+
+/* Background overlay for better text readability */
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--background-overlay);
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Glass morphism buttons like in the image */
+.glass-button {
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50px;
+  color: white;
+  padding: 12px 24px;
+  transition: all 0.3s ease;
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-2px);
+}
+
+.glass-button.active {
+  background: rgba(255, 255, 255, 0.9);
+  color: #667eea;
+}
+
+/* Large timer text styling */
+.timer-display {
+  font-size: 8rem;
+  font-weight: 300;
+  color: white;
+  text-shadow: 0 2px 20px rgba(0, 0, 0, 0.3);
+  font-family: var(--font-mono);
+}
+
+/* Centered layout like the image */
+.study-layout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+/* Focus app specific utility classes */
+.timer-circle {
+  background: conic-gradient(var(--timer-progress) 0deg, transparent 0deg);
+}
+
+.glass-morphism {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 16px;
+}
+
+.focus-glow {
+  box-shadow: 0 0 30px rgba(255, 255, 255, 0.2);
+}
+
+/* App title styling like the image */
+.app-title {
+  font-size: 2.5rem;
+  font-weight: 300;
+  color: white;
+  margin-bottom: 4rem;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+/* Mode buttons container */
+.mode-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 3rem;
+}
+
+/* Control buttons */
+.control-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .timer-display {
+    font-size: 6rem;
+  }
+
+  .app-title {
+    font-size: 2rem;
+  }
+
+  .mode-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .control-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+/* Smooth transitions for better UX */
+.transition-theme {
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
 }
