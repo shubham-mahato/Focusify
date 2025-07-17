@@ -1,8 +1,8 @@
-import ThemeTest from "@/components/TestTheme";
+import TimerTest from "@/components/TimerTest";
 export default function Home() {
   return (
     <div>
-      <ThemeTest />
+      <TimerTest />
     </div>
   );
 }
