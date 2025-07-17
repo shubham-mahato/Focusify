@@ -1,30 +1,31 @@
-//  lib/timerUtils.ts
+import { TimerMode, TIMER_DURATIONS } from "../types/timer";
 
-// Format seconds into MM:SS
-
-export const formatTimer = (seconds: number): string => {
-  const min = Math.floor(seconds / 60);
-  const sec = seconds % 60;
-  return `${min.toString().padStart(2, "0")}:${sec
+// Format seconds into MM:SS format
+export const formatTime = (seconds: number): string => {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins.toString().padStart(2, "0")}:${secs
     .toString()
     .padStart(2, "0")}`;
 };
- 
-export const formatReadableTimer = (seconds: number): string => {
-  const min = Math.floor(seconds / 60);
-  const sec = seconds % 60;
 
-  if (min === 0) {
-    return `${sec}${sec === 0 ? "second" : "seconds"}`;
-  }
-  if (sec === 0) {
-    return `${min} ${min === 1 ? "minute" : "minutes"}`;
+// Format seconds into a more readable format (e.g., "25 minutes")
+export const formatReadableTime = (seconds: number): string => {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+
+  if (mins === 0) {
+    return `${secs} ${secs === 1 ? "second" : "seconds"}`;
   }
 
-  return `${min}m ${sec}s`;
+  if (secs === 0) {
+    return `${mins} ${mins === 1 ? "minute" : "minutes"}`;
+  }
+
+  return `${mins}m ${secs}s`;
 };
 
-// Calculate Progress Percentage
+// Calculate progress percentage (0-100)
 export const calculateProgress = (
   timeLeft: number,
   totalTime: number
@@ -34,11 +35,8 @@ export const calculateProgress = (
   return Math.round((elapsed / totalTime) * 100);
 };
 
-//Get color based on timer mode
-
-export const getModeColor = (
-  mode: "focus" | "short-break" | "long-break"
-): string => {
+// Get color based on timer mode
+export const getModeColor = (mode: TimerMode): string => {
   switch (mode) {
     case "focus":
       return "text-focus-active";
@@ -52,10 +50,7 @@ export const getModeColor = (
 };
 
 // Get mode display name
-
-export const getModeDisplayName = (
-  mode: "focus" | "short-break" | "long-break"
-): string => {
+export const getModeDisplayName = (mode: TimerMode): string => {
   switch (mode) {
     case "focus":
       return "Focus Time";
@@ -68,19 +63,7 @@ export const getModeDisplayName = (
   }
 };
 
-// Get mode time duration
-
-export const getModeDuration = (
-  mode: "focus" | "short-duration" | "long-duration"
-): number => {
-  switch (mode) {
-    case "focus":
-      return 25 * 60;
-    case "short-duration":
-      return 5 * 60;
-    case "long-duration":
-      return 15 * 60;
-    default:
-      return 25 * 60;
-  }
+// Get mode duration in seconds
+export const getModeDuration = (mode: TimerMode): number => {
+  return TIMER_DURATIONS[mode];
 };

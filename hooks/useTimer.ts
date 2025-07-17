@@ -1,38 +1,21 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
-
-type TimerMode = "focus" | "short-break" | "long-break";
-
-const TIMER_DURATIONS = {
-  focus: 25 * 60,
-  "short-break": 5 * 60,
-  "long-break": 15 * 60,
-};
-
-interface UseTimerReturn {
-  timeLeft: number;
-  isRunning: boolean;
-  currentMode: TimerMode;
-  start: () => void;
-  pause: () => void;
-  reset: () => void;
-  setMode: (mode: TimerMode) => void;
-}
+import { useState, useEffect, useRef, useCallback } from "react";
+import { TimerMode, TIMER_DURATIONS, UseTimerReturn } from "../types/timer";
 
 export const useTimer = (initialMode: TimerMode = "focus"): UseTimerReturn => {
-  // state for current Mode
+  // State for current mode
   const [currentMode, setCurrentMode] = useState<TimerMode>(initialMode);
-  // state for timer remaining
+
+  // State for time remaining
   const [timeLeft, setTimeLeft] = useState(TIMER_DURATIONS[initialMode]);
-  // state for running state
+
+  // State for running status
   const [isRunning, setIsRunning] = useState(false);
 
-  //Ref to store Interval ID
+  // Ref to store interval ID (won't cause re-renders)
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  //Timer Controls
-  //Clear any existing Interval
-
+  // Clear any existing interval
   const clearTimer = useCallback(() => {
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
@@ -40,14 +23,13 @@ export const useTimer = (initialMode: TimerMode = "focus"): UseTimerReturn => {
     }
   }, []);
 
-  //Start the Timer
-
+  // Start the timer
   const start = useCallback(() => {
     if (!isRunning && timeLeft > 0) {
       setIsRunning(true);
       intervalRef.current = setInterval(() => {
         setTimeLeft((prev) => {
-          if (prev < 1) {
+          if (prev <= 1) {
             setIsRunning(false);
             return 0;
           }
@@ -57,23 +39,20 @@ export const useTimer = (initialMode: TimerMode = "focus"): UseTimerReturn => {
     }
   }, [isRunning, timeLeft]);
 
-  //Pause the timer
-
+  // Pause the timer
   const pause = useCallback(() => {
     setIsRunning(false);
     clearTimer();
   }, [clearTimer]);
 
-  //Reset Timer
-
+  // Reset the timer
   const reset = useCallback(() => {
     setIsRunning(false);
     clearTimer();
     setTimeLeft(TIMER_DURATIONS[currentMode]);
   }, [clearTimer, currentMode]);
 
-  // Change Timer Mode
-
+  // Change timer mode
   const setMode = useCallback(
     (mode: TimerMode) => {
       setIsRunning(false);
@@ -84,8 +63,7 @@ export const useTimer = (initialMode: TimerMode = "focus"): UseTimerReturn => {
     [clearTimer]
   );
 
-  // clean up on unmount
-
+  // Cleanup on unmount
   useEffect(() => {
     return () => {
       clearTimer();
@@ -94,11 +72,11 @@ export const useTimer = (initialMode: TimerMode = "focus"): UseTimerReturn => {
 
   return {
     timeLeft,
-    currentMode,
     isRunning,
+    currentMode,
     start,
-    reset,
     pause,
+    reset,
     setMode,
   };
 };

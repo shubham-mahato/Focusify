@@ -1,24 +1,19 @@
-// components/ModeSelector.tsx
+import { TimerMode, MODE_CONFIGS } from "../types/timer";
 
 interface ModeSelectorProps {
-  currentMode: "focus" | "short-break" | "long-break";
-  onModeChange: (mode: "focus" | "short-break" | "long-break") => void;
+  currentMode: TimerMode;
+  onModeChange: (mode: TimerMode) => void;
   disabled?: boolean;
 }
 
-export const ModeSelector = ({
+export default function ModeSelector({
   currentMode,
   onModeChange,
   disabled = false,
-}: ModeSelectorProps) => {
-  const modes = [
-    { key: "focus" as const, label: "Focus", duration: "25min" },
-    { key: "short-break" as const, label: "Short Break", duration: "5min" },
-    { key: "long-break" as const, label: "Long Break", duration: "15min" },
-  ];
+}: ModeSelectorProps) {
   return (
     <div className="mode-buttons">
-      {modes.map(({ key, label, duration }) => (
+      {MODE_CONFIGS.map(({ key, label, duration, description }) => (
         <button
           key={key}
           className={`glass-button ${currentMode === key ? "active" : ""} ${
@@ -26,6 +21,7 @@ export const ModeSelector = ({
           }`}
           onClick={() => !disabled && onModeChange(key)}
           disabled={disabled}
+          title={description}
         >
           <span className="block">{label}</span>
           <span className="text-xs opacity-75">{duration}</span>
@@ -33,4 +29,4 @@ export const ModeSelector = ({
       ))}
     </div>
   );
-};
+}

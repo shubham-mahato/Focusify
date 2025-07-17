@@ -1,8 +1,9 @@
-import TimerTest from "@/components/TimerTest";
+import Timer from "@/components/Timer";
+
 export default function Home() {
   return (
     <div>
-      <TimerTest />
+      <Timer />
     </div>
   );
 }
