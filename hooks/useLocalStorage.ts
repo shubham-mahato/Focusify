@@ -1,4 +1,41 @@
-import { useState, useEffect, useCallback } from "react";
+"use client";
+import { useState, useCallback } from "react";
+import { TimerMode } from "../types/timer";
+
+// Session interface
+interface Session {
+  id: string | number;
+  mode: TimerMode;
+  duration: number;
+  completedAt: number;
+  interrupted: boolean;
+}
+
+// Timer state interface
+interface TimerStateStorage {
+  currentMode: TimerMode;
+  timeLeft: number;
+  isRunning: boolean;
+  lastSaved: number;
+}
+
+// Pomodoro state interface
+interface PomodoroStateStorage {
+  sessionsCompleted: number;
+  currentCycle: number;
+  totalSessions: number;
+  isOnBreak: boolean;
+  lastReset: number;
+}
+
+// Preferences interface
+interface PreferencesStorage {
+  autoStartNext: boolean;
+  notificationsEnabled: boolean;
+  soundEnabled: boolean;
+  soundVolume: number;
+  theme: string;
+}
 
 // Generic localStorage hook
 export function useLocalStorage<T>(
@@ -8,6 +45,7 @@ export function useLocalStorage<T>(
   // Get value from localStorage or use initial value
   const [storedValue, setStoredValue] = useState<T>(() => {
     try {
+      // Check if we're in the browser
       if (typeof window === "undefined") {
         return initialValue;
       }
@@ -24,24 +62,29 @@ export function useLocalStorage<T>(
   const setValue = useCallback(
     (value: T | ((val: T) => T)) => {
       try {
-        const valueToStore =
-          value instanceof Function ? value(storedValue) : value;
-        setStoredValue(valueToStore);
+        setStoredValue((currentValue) => {
+          const valueToStore =
+            value instanceof Function ? value(currentValue) : value;
 
-        if (typeof window !== "undefined") {
-          window.localStorage.setItem(key, JSON.stringify(valueToStore));
-        }
+          // Only access localStorage in browser
+          if (typeof window !== "undefined") {
+            window.localStorage.setItem(key, JSON.stringify(valueToStore));
+          }
+
+          return valueToStore;
+        });
       } catch (error) {
         console.error(`Error setting localStorage key "${key}":`, error);
       }
     },
-    [key, storedValue]
-  );
+    [key]
+  ); // Remove storedValue from dependencies
 
   // Remove value from localStorage
   const removeValue = useCallback(() => {
     try {
       setStoredValue(initialValue);
+      // Only access localStorage in browser
       if (typeof window !== "undefined") {
         window.localStorage.removeItem(key);
       }
@@ -55,37 +98,31 @@ export function useLocalStorage<T>(
 
 // Specific hooks for timer data
 export function useTimerStorage() {
-  const [timerState, setTimerState, clearTimerState] = useLocalStorage(
-    "focusify-timer-state",
-    {
-      currentMode: "focus" as const,
+  const [timerState, setTimerState, clearTimerState] =
+    useLocalStorage<TimerStateStorage>("focusify-timer-state", {
+      currentMode: "focus",
       timeLeft: 1500, // 25 minutes
       isRunning: false,
       lastSaved: Date.now(),
-    }
-  );
+    });
 
-  const [pomodoroState, setPomodoroState, clearPomodoroState] = useLocalStorage(
-    "focusify-pomodoro-state",
-    {
+  const [pomodoroState, setPomodoroState, clearPomodoroState] =
+    useLocalStorage<PomodoroStateStorage>("focusify-pomodoro-state", {
       sessionsCompleted: 0,
       currentCycle: 1,
       totalSessions: 0,
       isOnBreak: false,
       lastReset: Date.now(),
-    }
-  );
+    });
 
-  const [preferences, setPreferences, clearPreferences] = useLocalStorage(
-    "focusify-preferences",
-    {
+  const [preferences, setPreferences, clearPreferences] =
+    useLocalStorage<PreferencesStorage>("focusify-preferences", {
       autoStartNext: false,
       notificationsEnabled: true,
       soundEnabled: true,
       soundVolume: 0.7,
       theme: "default",
-    }
-  );
+    });
 
   // Clear all stored data
   const clearAllData = useCallback(() => {
@@ -107,22 +144,22 @@ export function useTimerStorage() {
 
 // Session history storage
 export function useSessionHistory() {
-  const [sessions, setSessions, clearSessions] = useLocalStorage(
+  const [sessions, setSessions, clearSessions] = useLocalStorage<Session[]>(
     "focusify-session-history",
     []
   );
 
   const addSession = useCallback(
-    (session: {
-      mode: string;
+    (sessionData: {
+      mode: TimerMode;
       duration: number;
       completedAt: number;
       interrupted: boolean;
     }) => {
-      setSessions((prev: any[]) => [
+      setSessions((prev: Session[]) => [
         ...prev,
         {
-          ...session,
+          ...sessionData,
           id: Date.now() + Math.random(),
         },
       ]);
@@ -131,14 +168,14 @@ export function useSessionHistory() {
   );
 
   const getSessionsForDate = useCallback(
-    (date: Date) => {
+    (date: Date): Session[] => {
       const startOfDay = new Date(date);
       startOfDay.setHours(0, 0, 0, 0);
 
       const endOfDay = new Date(date);
       endOfDay.setHours(23, 59, 59, 999);
 
-      return sessions.filter((session: any) => {
+      return sessions.filter((session: Session) => {
         const sessionDate = new Date(session.completedAt);
         return sessionDate >= startOfDay && sessionDate <= endOfDay;
       });
@@ -146,11 +183,11 @@ export function useSessionHistory() {
     [sessions]
   );
 
-  const getTotalSessionsToday = useCallback(() => {
+  const getTotalSessionsToday = useCallback((): number => {
     const today = new Date();
     const todaySessions = getSessionsForDate(today);
     return todaySessions.filter(
-      (session: any) => session.mode === "focus" && !session.interrupted
+      (session: Session) => session.mode === "focus" && !session.interrupted
     ).length;
   }, [getSessionsForDate]);
 

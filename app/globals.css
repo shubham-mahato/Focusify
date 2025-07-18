@@ -18,13 +18,13 @@
   --muted-foreground: rgba(255, 255, 255, 0.7);
   --border: rgba(255, 255, 255, 0.2);
   --ring: #ffffff;
-  
+
   /* Focus-specific colors for study aesthetic */
   --focus-active: #ffffff;
   --focus-break: rgba(255, 255, 255, 0.8);
   --focus-pause: #fbbf24;
   --focus-complete: #10b981;
-  
+
   /* Timer colors */
   --timer-progress: #3b82f6;
   --timer-background: #f1f5f9;
@@ -49,13 +49,13 @@
     --muted-foreground: rgba(255, 255, 255, 0.6);
     --border: rgba(255, 255, 255, 0.2);
     --ring: #ffffff;
-    
+
     /* Focus-specific colors - dark mode */
     --focus-active: #ffffff;
     --focus-break: rgba(255, 255, 255, 0.8);
     --focus-pause: #fbbf24;
     --focus-complete: #10b981;
-    
+
     /* Timer colors - dark mode */
     --timer-progress: #60a5fa;
     --timer-background: #1e293b;
@@ -80,86 +80,91 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-border: var(--border);
   --color-ring: var(--ring);
-  
+
   /* Focus app specific colors */
   --color-focus-active: var(--focus-active);
   --color-focus-break: var(--focus-break);
   --color-focus-pause: var(--focus-pause);
   --color-focus-complete: var(--focus-complete);
-  
+
   /* Timer specific colors */
   --color-timer-progress: var(--timer-progress);
   --color-timer-background: var(--timer-background);
   --color-timer-text: var(--timer-text);
-  
+
   /* Typography */
   --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui;
   --font-mono: var(--font-geist-mono), ui-monospace, monospace;
-  
+
   /* Custom animations */
   --animate-pulse-slow: pulse-slow 3s ease-in-out infinite;
   --animate-timer-tick: timer-tick 1s ease-in-out;
   --animate-bounce-gentle: bounce-gentle 2s ease-in-out infinite;
   --animate-fade-in: fade-in 0.3s ease-out;
   --animate-slide-up: slide-up 0.3s ease-out;
-  
+
   /* Border radius */
   --radius-sm: 0.25rem;
   --radius: 0.5rem;
   --radius-md: 0.75rem;
   --radius-lg: 1rem;
   --radius-xl: 1.5rem;
-  
+
   /* Shadows for depth */
-  --shadow-timer: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  --shadow-timer: 0 10px 25px -5px rgba(0, 0, 0, 0.1),
+    0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  --shadow-card: 0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
 /* Custom keyframes for animations */
 @keyframes pulse-slow {
-  0%, 100% { 
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
-  50% { 
+  50% {
     opacity: 0.8;
     transform: scale(1.02);
   }
 }
 
 @keyframes timer-tick {
-  0%, 100% { 
+  0%,
+  100% {
     transform: scale(1);
   }
-  50% { 
+  50% {
     transform: scale(1.05);
   }
 }
 
 @keyframes bounce-gentle {
-  0%, 100% { 
+  0%,
+  100% {
     transform: translateY(0);
   }
-  50% { 
+  50% {
     transform: translateY(-4px);
   }
 }
 
 @keyframes fade-in {
-  from { 
+  from {
     opacity: 0;
   }
-  to { 
+  to {
     opacity: 1;
   }
 }
 
 @keyframes slide-up {
-  from { 
+  from {
     transform: translateY(20px);
     opacity: 0;
   }
-  to { 
+  to {
     transform: translateY(0);
     opacity: 1;
   }
@@ -183,7 +188,7 @@ body {
 
 /* Background overlay for better text readability */
 body::before {
-  content: '';
+  content: "";
   position: fixed;
   top: 0;
   left: 0;
@@ -237,10 +242,7 @@ body::before {
 
 /* Focus app specific utility classes */
 .timer-circle {
-  background: conic-gradient(
-    var(--timer-progress) 0deg,
-    transparent 0deg
-  );
+  background: conic-gradient(var(--timer-progress) 0deg, transparent 0deg);
 }
 
 .glass-morphism {
@@ -263,24 +265,82 @@ body::before {
   text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
 }
 
-/* Session counter styles */
-.session-counter {
-  text-align: center;
-  padding: 1rem;
+/* Settings panel styles */
+.settings-overlay {
+  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.5);
 }
 
-.session-counter .session-indicator {
-  transition: all 0.3s ease;
+/* Volume slider styles */
+.slider {
+  background: rgba(255, 255, 255, 0.2);
 }
 
-.session-counter .session-indicator.completed {
-  transform: scale(1.1);
-  background: var(--focus-complete);
-}
-
-.session-counter .session-indicator.current {
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
   background: var(--focus-active);
-  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5);
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+.slider::-moz-range-thumb {
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background: var(--focus-active);
+  cursor: pointer;
+  border: 2px solid white;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+}
+
+/* Notification prompt animation */
+@keyframes slide-up {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.3s ease-out;
+}
+
+/* Better modal backdrop */
+.modal-backdrop {
+  backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.4);
+}
+
+/* Focus states for accessibility */
+.glass-button:focus {
+  outline: 2px solid var(--focus-active);
+  outline-offset: 2px;
+}
+
+input[type="range"]:focus {
+  outline: 2px solid var(--focus-active);
+  outline-offset: 2px;
+}
+
+/* Loading states */
+.loading-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Improved glass morphism for modals */
+.glass-modal {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
 }
 
 /* Auto-start countdown animation */
@@ -289,11 +349,12 @@ body::before {
 }
 
 @keyframes countdown-pulse {
-  0%, 100% { 
+  0%,
+  100% {
     opacity: 1;
     transform: scale(1);
   }
-  50% { 
+  50% {
     opacity: 0.7;
     transform: scale(1.05);
   }
@@ -399,16 +460,16 @@ input:checked + .toggle-slider:before {
   .timer-display {
     font-size: 4rem;
   }
-  
+
   .app-title {
     font-size: 2rem;
   }
-  
+
   .mode-buttons {
     flex-direction: column;
     align-items: center;
   }
-  
+
   .control-buttons {
     flex-direction: column;
     align-items: center;
@@ -417,5 +478,6 @@ input:checked + .toggle-slider:before {
 
 /* Smooth transitions for better UX */
 .transition-theme {
-  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease,
+    border-color 0.3s ease;
 }

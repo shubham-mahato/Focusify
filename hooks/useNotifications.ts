@@ -23,21 +23,26 @@ interface UseNotificationsReturn {
 export function useNotifications(): UseNotificationsReturn {
   const [permission, setPermission] =
     useState<NotificationPermission>("default");
+  const [isSupported, setIsSupported] = useState(false);
 
-  // Check if notifications are supported
-  const isSupported = "Notification" in window;
-
-  // Initialize permission state
+  // Initialize support and permission state (client-side only)
   useEffect(() => {
-    if (isSupported) {
-      setPermission(Notification.permission as NotificationPermission);
+    // Check if we're in the browser
+    if (typeof window !== "undefined") {
+      const supported = "Notification" in window;
+      setIsSupported(supported);
+
+      if (supported) {
+        setPermission(Notification.permission as NotificationPermission);
+      }
     }
-  }, [isSupported]);
+  }, []);
 
   // Request notification permission
   const requestPermission =
     useCallback(async (): Promise<NotificationPermission> => {
-      if (!isSupported) {
+      // Check if we're in browser and notifications are supported
+      if (typeof window === "undefined" || !("Notification" in window)) {
         return "denied";
       }
 
@@ -49,12 +54,17 @@ export function useNotifications(): UseNotificationsReturn {
         console.error("Error requesting notification permission:", error);
         return "denied";
       }
-    }, [isSupported]);
+    }, []);
 
   // Show a notification
   const showNotification = useCallback(
     (options: NotificationOptions) => {
-      if (!isSupported || permission !== "granted") {
+      // Check if we're in browser and have permission
+      if (
+        typeof window === "undefined" ||
+        !("Notification" in window) ||
+        permission !== "granted"
+      ) {
         console.log("Notifications not available or not permitted");
         return;
       }
@@ -83,7 +93,7 @@ export function useNotifications(): UseNotificationsReturn {
         console.error("Error showing notification:", error);
       }
     },
-    [isSupported, permission]
+    [permission]
   );
 
   // Show session complete notification

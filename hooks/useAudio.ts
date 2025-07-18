@@ -1,3 +1,4 @@
+"use client";
 import { useState, useCallback, useRef, useEffect } from "react";
 import { TimerMode } from "../types/timer";
 
@@ -39,10 +40,13 @@ export function useAudio(): UseAudioReturn {
   const [isPlaying, setIsPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
-  // Create audio element
+  // Create audio element (client-side only)
   useEffect(() => {
-    audioRef.current = new Audio();
-    audioRef.current.volume = settings.volume;
+    // Only create audio element in browser
+    if (typeof window !== "undefined") {
+      audioRef.current = new Audio();
+      audioRef.current.volume = settings.volume;
+    }
 
     return () => {
       if (audioRef.current) {
@@ -50,11 +54,11 @@ export function useAudio(): UseAudioReturn {
         audioRef.current = null;
       }
     };
-  }, [settings.volume]);
+  }, []);
 
-  // Update volume when settings change
+  // Update volume when settings change (client-side only)
   useEffect(() => {
-    if (audioRef.current) {
+    if (typeof window !== "undefined" && audioRef.current) {
       audioRef.current.volume = settings.volume;
     }
   }, [settings.volume]);
