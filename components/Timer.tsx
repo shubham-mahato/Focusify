@@ -1,3 +1,4 @@
+"use client";
 import { useTimer } from "../hooks/useTimer";
 import {
   formatTime,

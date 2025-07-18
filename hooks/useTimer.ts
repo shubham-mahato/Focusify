@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect, useRef, useCallback } from "react";
 import { TimerMode, TIMER_DURATIONS, UseTimerReturn } from "../types/timer";
 import { usePomodoroState } from "./usePomodoroState";
