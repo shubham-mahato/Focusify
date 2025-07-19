@@ -63,10 +63,11 @@ export default function KeyboardShortcutsHelp({
 
   // Group shortcuts by category
   const groupedShortcuts = shortcuts.reduce((acc, shortcut) => {
-    if (!acc[shortcut.category]) {
-      acc[shortcut.category] = [];
+    const category = shortcut.category;
+    if (!acc[category]) {
+      acc[category] = [];
     }
-    acc[shortcut.category].push(shortcut);
+    acc[category]!.push(shortcut); // Non-null assertion since we just created it
     return acc;
   }, {} as Record<string, ShortcutItem[]>);
 

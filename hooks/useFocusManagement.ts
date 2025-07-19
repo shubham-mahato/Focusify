@@ -4,7 +4,9 @@ interface UseFocusManagementReturn {
   focusElement: (selector: string) => void;
   focusFirst: () => void;
   focusLast: () => void;
-  trapFocus: (containerRef: React.RefObject<HTMLElement>) => () => void;
+  trapFocus: (
+    containerRef: React.RefObject<HTMLElement | HTMLDivElement>
+  ) => () => void; // ← FIXED THIS LINE
   announceToScreenReader: (message: string) => void;
 }
 
@@ -70,7 +72,7 @@ export function useFocusManagement(): UseFocusManagementReturn {
 
   // Trap focus within a container (for modals)
   const trapFocus = useCallback(
-    (containerRef: React.RefObject<HTMLElement>) => {
+    (containerRef: React.RefObject<HTMLElement | HTMLDivElement>) => {
       const container = containerRef.current;
       if (!container) return () => {};
 
@@ -81,8 +83,9 @@ export function useFocusManagement(): UseFocusManagementReturn {
       const firstElement = focusableElements[0];
       const lastElement = focusableElements[focusableElements.length - 1];
 
-      const handleTabKey = (e: KeyboardEvent) => {
-        if (e.key !== "Tab") return;
+      const handleTabKey = (e: Event) => {
+        // Type guard to ensure it's a KeyboardEvent
+        if (!(e instanceof KeyboardEvent) || e.key !== "Tab") return;
 
         if (e.shiftKey) {
           // Shift + Tab
