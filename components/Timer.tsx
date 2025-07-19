@@ -9,6 +9,7 @@ import {
 } from "../lib/timerUtils";
 import ModeSelector from "./ModeSelector";
 import ProgressCircle from "./ProgressCircle";
+import TaskPanel from "./TaskPanel";
 
 export default function Timer() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
@@ -19,6 +20,7 @@ export default function Timer() {
   const totalTime = getModeDuration(timer.currentMode);
   const progress = calculateProgress(timer.timeLeft, totalTime);
 
+  const [showTasks, setShowTasks] = useState(false);
   return (
     <div className="study-layout">
       {/* App Title */}
@@ -28,6 +30,20 @@ export default function Timer() {
           your productivity companion
         </div>
       </div>
+
+      {/*Add button in controls*/}
+      <button onClick={() => setShowTasks(!showTasks)} className="glass-button">
+        Tasks
+      </button>
+      {/*Add task panel */}
+      {showTasks && (
+        <div className="mt-8 max-w-md mx-auto">
+          <TaskPanel
+            isVisible={showTasks}
+            onClose={() => setShowTasks(false)}
+          />
+        </div>
+      )}
 
       {/* Simple Session Counter */}
       <div className="mb-6 text-center">
