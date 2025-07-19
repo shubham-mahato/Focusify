@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "prepare": "husky",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+     "analyze": "ANALYZE=true npm run build",
+    "build:analyze": "npm run build && npx webpack-bundle-analyzer .next/static/chunks"
   },
   "dependencies": {
     "next": "15.3.5",
@@ -30,6 +32,7 @@
     "jest-environment-jsdom": "^30.0.4",
     "lint-staged": "^16.1.2",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "webpack-bundle-analyzer": "^4.10.2"
   }
 }
