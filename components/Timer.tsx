@@ -1,3 +1,4 @@
+"use client";
 import { useState, useEffect } from "react";
 import { useTimer } from "../hooks/useTimer";
 import { useKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
