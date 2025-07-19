@@ -107,6 +107,7 @@ export default function FocusMode({
                 className="w-8 h-8 text-white"
                 fill="currentColor"
                 viewBox="0 0 20 20"
+                aria-hidden="true"
               >
                 <path
                   fillRule="evenodd"
@@ -119,6 +120,7 @@ export default function FocusMode({
                 className="w-8 h-8 text-white ml-1"
                 fill="currentColor"
                 viewBox="0 0 20 20"
+                aria-hidden="true"
               >
                 <path
                   fillRule="evenodd"

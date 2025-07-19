@@ -5,8 +5,8 @@ interface UseFocusManagementReturn {
   focusFirst: () => void;
   focusLast: () => void;
   trapFocus: (
-    containerRef: React.RefObject<HTMLElement | HTMLDivElement>
-  ) => () => void; // ← FIXED THIS LINE
+    containerRef: React.RefObject<HTMLElement | HTMLDivElement | null>
+  ) => () => void;
   announceToScreenReader: (message: string) => void;
 }
 
@@ -70,9 +70,9 @@ export function useFocusManagement(): UseFocusManagementReturn {
     }
   }, []);
 
-  // Trap focus within a container (for modals)
+  // Trap focus within a container (for modals) - FIXED TO ACCEPT NULL
   const trapFocus = useCallback(
-    (containerRef: React.RefObject<HTMLElement | HTMLDivElement>) => {
+    (containerRef: React.RefObject<HTMLElement | HTMLDivElement | null>) => {
       const container = containerRef.current;
       if (!container) return () => {};
 
